@@ -1,9 +1,9 @@
 class NodoABB {
     Mascota mascota;
-    Nodo izquierdo, derecho;
+    Nodo derecho, izquierdo ;
 
-    public Nodo(Mascota mascota) {
+    public NodoABB(Mascota mascota) {
         this.mascota = mascota;
-        izquierdo = derecho = null;
+        this.derecho = this.izquierdo = null;
     }
 }
