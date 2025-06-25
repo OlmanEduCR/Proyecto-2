@@ -1,4 +1,4 @@
-class NodoArbol {
+class NodoABB {
     Mascota mascota;
     Nodo izquierdo, derecho;
 
