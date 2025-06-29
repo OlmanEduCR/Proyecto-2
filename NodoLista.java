@@ -1,39 +1,29 @@
 public class NodoLista {
     //Atributos 
-    NodoLista anterior;
-    Animal datos;
+    NodoLista siguiente;
+    Mascota datos;
     
     //Métodos Constructores
-    public NodoLista(){
-        setAnterior(null);
-        setDatos(null);
-    }
-
-    public NodoLista(Animal datosP){
-        setAnterior(null);
-        setDatos(datosP);
-    }
-    
-    public NodoLista(NodoLista anteriorP, Animal datosP){
-        setAnterior(anteriorP);
+    public NodoLista(Mascota datosP){
+        setSiguiente(null);
         setDatos(datosP);
     }
 
     //Getters
-    public NodoLista getAnterior(){
-        return anterior;
+    public NodoLista getSiguiente(){
+        return siguiente;
     }
 
-    public Animal getDatos(){
+    public Mascota getDatos(){
         return datos;
     }
 
     //Setters
-    public void setAnterior(NodoLista anteriorP){
-        this.anterior = anteriorP;
+    public void setSiguiente(NodoLista siguienteP){
+        this.siguiente = siguienteP;
     }
 
-    public void setDatos(Animal datosP){
+    public void setDatos(Mascota datosP){
         this.datos = datosP;
     }
 }
