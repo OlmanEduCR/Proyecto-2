@@ -1,29 +1,29 @@
 class ArbolBinarioBusqueda {
-    Nodo raiz;
+    NodoABB raiz;
 
     public ArbolBinarioBusqueda() {
         raiz = null;
     }
 
     // Inserta una mascota en el arbol, ordenando por nombre
-    void insertar(Mascota mascota) {
-        raiz = insertarRec(raiz, mascota);
+    public void insertar(Mascota mascota) {
+        raiz = insertarRec(mascota, raiz);
     }
 
-    Nodo insertarRec(Mascota mascota, Nodo raiz ) {
+    public NodoABB insertarRec(Mascota mascota, NodoABB raiz ) {
         if (raiz == null) {
-            return new Nodo(mascota);
+            return new NodoABB(mascota);
         }
         int cmp = mascota.getNombre().compareToIgnoreCase(raiz.mascota.getNombre());
         if (cmp < 0)
-            raiz.izquierdo = insertarRec(raiz.izquierdo, mascota);
+            raiz.izquierdo = insertarRec(mascota ,raiz.izquierdo);
         else if (cmp > 0)
-            raiz.derecho = insertarRec(raiz.derecho, mascota);
+            raiz.derecho = insertarRec(mascota, raiz.derecho);
         // Si es igual, no inserta duplicados (puedes cambiar esto si lo deseas)
         return raiz;
     }
 
-    void inordenRec(Nodo raiz) {
+    public void inordenRec(NodoABB raiz) {
         if (raiz != null) {
             inordenRec(raiz.izquierdo);
             System.out.print(raiz.mascota.getNombre() + " ");
@@ -32,11 +32,11 @@ class ArbolBinarioBusqueda {
     }
 
     // Metodo extraer: imprime en orden los nombres de las mascotas
-    void extraer() {
+    public void extraer() {
         extraerRec(raiz);
     }
 
-    void extraerRec(Nodo nodo) {
+    public void extraerRec(NodoABB nodo) {
         if (nodo != null) {
             extraerRec(nodo.izquierdo);
             System.out.println(nodo.mascota.getNombre());
