@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javafx.scene.layout.Border;
 
@@ -94,7 +95,6 @@ public class Interfaz extends JFrame{
                         modeloTabla.addRow(new Object[]{mascota.getId(), mascota.getNombre(), mascota.getHistorial()});
                     } catch (NumberFormatException e){
                         System.err.println("Error en formato de ID;" +  datos[1]);
-
                     }
                 }
             } 
@@ -105,6 +105,30 @@ public class Interfaz extends JFrame{
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Lectura del archivo erronea; " +e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private void buscarPorID() {
+        try {
+            int idBusqueda = Integer.parseInt(campoBusqueda.getText().trim());
+            //para buscar en el arbol
+            Mascota mascotaEncontrada = arbolMascotas.buscarPorId(idBusqueda);
+            modeloTabla.setRowCount(0);
+            
+            if (mascotaEncontrada != null) {
+                modeloTabla.addRow(new Object[]{ mascotaEncontrada.getId(), mascotaEncontrada.getNombre(), mascotaEncontrada.getHistorial()});
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró mascota con ID: " + idBusqueda, "Búsqueda", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "ID debe ser un número válido", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void actualizarContador() {
+        etiquetaContador.setText("Total de mascotas cargadas: " + contadorMascotas);
+    }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new VentanaPrincipal());
     }
 
 
@@ -119,12 +143,6 @@ public class Interfaz extends JFrame{
 
 
 
-
-
-
-
-
-    
 
 
 
