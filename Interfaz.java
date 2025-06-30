@@ -1,5 +1,4 @@
 import java.awt.BorderLayout;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -8,13 +7,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-
 import javafx.scene.layout.Border;
 
 public class Interfaz extends JFrame{
 
-
-    
     private JTable tablaMascotas;
     private DefaultTableModel modeloTabla;
     private JTextField campoBusqueda;
@@ -24,7 +20,6 @@ public class Interfaz extends JFrame{
     private ListaEnlazada listaMascotas;
     private int contadorMascotas;
     
-
     public Interfaz (){
         setTitle("Gestión de Mascotas Pacientes");
         setSize(800, 600);
@@ -36,12 +31,9 @@ public class Interfaz extends JFrame{
         listaMascotas = new ListaEnlazada();
         contadorMascotas = 0;
 
-
         crearComponente();
         setVisible(true);
-
     }
-
 
     private crearComponente(){
         //Busqueda
@@ -55,7 +47,6 @@ public class Interfaz extends JFrame{
         panelSuperior.add(botonBuscar);
         panelSuperior.add(botonCargar);
         add(panelSuperior, BorderLayout.NORTH);
-
 
         modeloTabla = new DefaultTableModel();
         modeloTabla.addColumn("ID");
@@ -74,6 +65,5 @@ public class Interfaz extends JFrame{
         botonBuscar.addActionListener(e -> buscarPorID());
         botonCargar.addActionListener(e -> cargarDatos());
         campoBusqueda.addActionListener(e -> buscarPorID());
-    }
-    
+    } 
 }
