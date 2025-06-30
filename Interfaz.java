@@ -1,7 +1,13 @@
 import java.awt.BorderLayout;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -66,4 +72,60 @@ public class Interfaz extends JFrame{
         botonCargar.addActionListener(e -> cargarDatos());
         campoBusqueda.addActionListener(e -> buscarPorID());
     } 
+
+    private void cargarDatos(){
+        modeloTabla.setRowCount(0);
+        arbolMascotas = new ArbolBinarioBusqueda();
+        contadorMascotas = 0;
+
+        try (BufferedReader br = new BufferedReader(new FileReader("Datos_Marcota.txt"))){
+
+            String linea;
+            while ((linea = br.readLine()) != null){
+                String[] datos = linea.split (",");
+                if (datos.length >= 3 ){
+                    try {
+                        int id = Integer.parseInt(datos[1].trim());
+                        Mascota mascota = new Mascota( datos[0].trim, id, datos[2].trim());
+
+                        arbolMascotas.insertar(mascota);
+                        contadorMarcota ++;
+
+                        modeloTabla.addRow(new Object[]{mascota.getId(), mascota.getNombre(), mascota.getHistorial()});
+                    } catch (NumberFormatException e){
+                        System.err.println("Error en formato de ID;" +  datos[1]);
+
+                    }
+                }
+            } 
+            actualizarContador();
+            JOptionPane.showMessageDialog(this, "Datos exitosamente cargada");
+        } catch (FileNotFoundException e){
+            JOptionPane.showMessageDialog(this, "No se encontro archivo", "ERROR" , JOptionPane.ERROR_MESSAGE);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Lectura del archivo erronea; " +e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
 }
