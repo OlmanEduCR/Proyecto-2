@@ -43,5 +43,42 @@ class ArbolBinarioBusqueda {
             extraerRec(nodo.derecho);
         }
     }
+
+    //Eliminar nodo
+    public void eliminar (String nombreMascota){
+        raiz = eliminarRec(raiz, nombreMascota);
+    }
+
+
+    private NodoABB eliminarRec(NodoABB nodo, String nombreMascota){
+        if(nodo == null){
+            return null;
+        }
+        
+        
+
+        int cmp = nombreMascota.compareToIgnoreCase(nodo.mascota.getNombre());
+        if (cmp < 0){
+            nodo.izquierdo = eliminarRec(nodo.izquierdo, nombreMascota);
+        } else if (cmp > 0 ) {
+            nodo.derecho = eliminarRec(nodo.derecho, nombreMascota);
+        } else {
+            if (nodo.izquierdo == null) {
+                return nodo.derecho;
+            } else if (nodo.derecho == null) {
+                return nodo.izquierdo;
+            }
+            nodo.mascota = minValor(nodo.derecho);
+            nodo.derecho = eliminarRec(nodo.derecho, nodo.mascota.getNombre());
+        }
+        return nodo;
+    }
+    private Mascota minValor(NodoABB nodo){
+        NodoABB actual = nodo;
+        while(actual.izquierdo != null) {
+            actual = actual.izquierdo;
+        }
+        return actual.mascota;
+    }
 }
 
