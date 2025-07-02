@@ -1,149 +1,90 @@
-import java.awt.BorderLayout;
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableModel;
-import javafx.scene.layout.Border;
+import javax.swing.*;
 
 public class Interfaz extends JFrame{
 
-    private JTable tablaMascotas;
-    private DefaultTableModel modeloTabla;
-    private JTextField campoBusqueda;
-    private JButton botonCargar;
-    private JButton botonBuscar;
     private ArbolBinarioBusqueda arbolMascotas;
     private ListaEnlazada listaMascotas;
     private int contadorMascotas;
     
-    public Interfaz (){
+    public Interfaz(){
         setTitle("Gestión de Mascotas Pacientes");
-        setSize(800, 600);
+        setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
+        setLocationRelativeTo(null);
 
-        // estructura de busqueda
-        arbolMascotas = new ArbolBinarioBusqueda();
-        listaMascotas = new ListaEnlazada();
-        contadorMascotas = 0;
+        //Barra de Menú
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menuPrincipal = new JMenu("Principal");
+        JMenuItem salirItem = new JMenuItem("Salir");
+        JMenuItem verColaDeEspera = new JMenuItem("Ver Cola");
 
-        crearComponente();
-        setVisible(true);
-    }
+        menuBar.add(menuPrincipal);
+        menuPrincipal.add(verColaDeEspera);
+        menuPrincipal.add(salirItem);
+        setJMenuBar(menuBar);
 
-    private crearComponente(){
-        //Busqueda
-        JPanel panelSuperior = new JPanel(new flowLayout());
-        campoBusqueda = new JTextField(30);
-        botonBuscar = new JTextField("Buscar por ID");
-        botonCargar = JButton("Cargar Datos");
+        //Función Salir
+        salirItem.addActionListener(e -> System.exit(0));
 
-        panelSuperior.add(new JLabel("Buscar por ID:"));
-        panelSuperior.add(campoBusqueda);
-        panelSuperior.add(botonBuscar);
-        panelSuperior.add(botonCargar);
-        add(panelSuperior, BorderLayout.NORTH);
-
-        modeloTabla = new DefaultTableModel();
-        modeloTabla.addColumn("ID");
-        modeloTabla.addColumn("Nombre");
-        modeloTabla.addColumn("Historial");
-
-        tablaMascotas = new DefaultTableModel(modeloTabla);
-        JScrollPane scrollPane = new JScrollPane(tablaMascotas);
-        add(scrollPane, BorderLayout.CENTER);
-
-        //panel inferior
-        JPanel panelInferior = new JPanel();
-        panelInferior.add(new JLabel("Mascotas registradas : 0"));
-        add(panelInferior, BorderLayout.SOUTH);
-
-        botonBuscar.addActionListener(e -> buscarPorID());
-        botonCargar.addActionListener(e -> cargarDatos());
-        campoBusqueda.addActionListener(e -> buscarPorID());
-    } 
-
-    private void cargarDatos(){
-        modeloTabla.setRowCount(0);
-        arbolMascotas = new ArbolBinarioBusqueda();
-        contadorMascotas = 0;
-
-        try (BufferedReader br = new BufferedReader(new FileReader("Datos_Marcota.txt"))){
-
-            String linea;
-            while ((linea = br.readLine()) != null){
-                String[] datos = linea.split (",");
-                if (datos.length >= 3 ){
-                    try {
-                        int id = Integer.parseInt(datos[1].trim());
-                        Mascota mascota = new Mascota( datos[0].trim, id, datos[2].trim());
-
-                        arbolMascotas.insertar(mascota);
-                        contadorMarcota ++;
-
-                        modeloTabla.addRow(new Object[]{mascota.getId(), mascota.getNombre(), mascota.getHistorial()});
-                    } catch (NumberFormatException e){
-                        System.err.println("Error en formato de ID;" +  datos[1]);
-                    }
-                }
-            } 
-            actualizarContador();
-            JOptionPane.showMessageDialog(this, "Datos exitosamente cargada");
-        } catch (FileNotFoundException e){
-            JOptionPane.showMessageDialog(this, "No se encontro archivo", "ERROR" , JOptionPane.ERROR_MESSAGE);
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Lectura del archivo erronea; " +e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private void buscarPorID() {
-        try {
-            int idBusqueda = Integer.parseInt(campoBusqueda.getText().trim());
-            //para buscar en el arbol
-            Mascota mascotaEncontrada = arbolMascotas.buscarPorId(idBusqueda);
-            modeloTabla.setRowCount(0);
+        //Función ver la cola
+        verColaDeEspera.addActionListener(e -> {
             
-            if (mascotaEncontrada != null) {
-                modeloTabla.addRow(new Object[]{ mascotaEncontrada.getId(), mascotaEncontrada.getNombre(), mascotaEncontrada.getHistorial()});
-            } else {
-                JOptionPane.showMessageDialog(this, "No se encontró mascota con ID: " + idBusqueda, "Búsqueda", JOptionPane.INFORMATION_MESSAGE);
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "ID debe ser un número válido", "Error", JOptionPane.ERROR_MESSAGE);
+        });
+
+        //Panel de Información
+        JPanel panelInformacion = new JPanel();
+        panelInformacion.setLayout(new BoxLayout(panelInformacion, BoxLayout.Y_AXIS));
+
+        JLabel etiquetaNombre = new JLabel("Digite el nombre de la Mascota: ");
+        JTextField campoNombre = new JTextField(20);       
+
+        JLabel etiquetaId = new JLabel("Digite su Id:");
+        JTextField campoId = new JTextField(20);
+
+
+        panelInformacion.add(etiquetaNombre);
+        panelInformacion.add(campoNombre);
+        panelInformacion.add(etiquetaId);
+        panelInformacion.add(campoId);
+        add(panelInformacion);
+
+        //Lectura Archivo .txt
+        File registro = new File("registro_pacientes.txt");
+        if(registro.exists()){
+           
         }
+
+        //Ingresar Mascota
+        JButton botonIngresar = new JButton("Ingresar al Sistema");
+
+        botonIngresar.addActionListener(e ->{
+            String mascotaNombre = campoNombre.getText();
+            String mascotaId = campoId.getText();
+            if(mascotaNombre.isEmpty() || mascotaId.isEmpty()){
+                JOptionPane.showMessageDialog(null, "Debe llenar todos los campos.");
+                return;
+            }
+            Mascota mascotaPorIngresar = new Mascota(mascotaNombre, mascotaId);
+            listaMascotas.agregar(mascotaPorIngresar);
+            JOptionPane.showMessageDialog(null, "Mascota ingresada exitosamente.");
+            campoNombre.setText("");
+            campoId.setText("");
+        });panelInformacion.add(botonIngresar);
+
+        //Atender Mascota
+
+        
+
     }
-    
-    private void actualizarContador() {
-        etiquetaContador.setText("Total de mascotas cargadas: " + contadorMascotas);
-    }
+
+       
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new VentanaPrincipal());
+       Interfaz interfaz = new Interfaz();
+       interfaz.setVisible(true);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

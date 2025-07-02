@@ -1,16 +1,12 @@
 public class Mascota{
     //Atributos
     private String nombre;
-    private int id;
-    private String historial;
-
+    private String id;
 
     //Metodo constructor
-    public Mascota(String nombreP, int idP, String historialP){
+    public Mascota(String nombreP, String idP){
         this.nombre = nombreP;
         this.id = idP;
-        this.historial = historialP;
-
     }
 
     //Getters
@@ -18,16 +14,12 @@ public class Mascota{
         return nombre;
     }
 
-    public int getId(){
+    public String getId(){
         return id;
     }
 
-    public String getHistorial(){
-        return historial;
-    }
-
     //Setters
-    public void setId(int idP){
+    public void setId(String idP){
         this.id = idP;
     }
 } 

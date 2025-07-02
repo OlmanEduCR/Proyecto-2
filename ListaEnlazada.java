@@ -21,10 +21,17 @@ public class ListaEnlazada{
         }
     }
 
-    public void atender(Mascota datos){
-        if (cabeza == null) return;            
+    public boolean atender(Mascota datos){
+        if (cabeza == null) return false;            
         if (cabeza.datos.equals(datos)) {
             cabeza = cabeza.siguiente;
+        } return true;
+    }
+    
+    public void imprimir(){
+        NodoLista actual = cabeza;
+        while(actual != null){
+            
         }
     }
 }
