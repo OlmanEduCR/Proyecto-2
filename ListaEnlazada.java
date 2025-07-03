@@ -5,7 +5,7 @@ public class ListaEnlazada{
 
     //Metodo Constructor
     public ListaEnlazada(){
-        this.cabeza = new NodoLista(null);
+        this.cabeza = null;
         this.tamano = 0;
     }
 
@@ -35,9 +35,6 @@ public class ListaEnlazada{
 }
     
     public void imprimir(){
-        NodoLista actual = cabeza;
-        while(actual != null){
-            
-        }
+        
     }
 }
