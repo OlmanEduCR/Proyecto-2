@@ -12,12 +12,12 @@ public class Interfaz extends JFrame{
     private int contadorMascotas;
     
     public Interfaz(){
-        setTitle("Gestión de Mascotas Pacientes");
+        setTitle("Gestion de Mascotas Pacientes");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        //Barra de Menú
+        //Barra de Menu
         JMenuBar menuBar = new JMenuBar();
         JMenu menuPrincipal = new JMenu("Principal");
         JMenuItem salirItem = new JMenuItem("Salir");
@@ -28,15 +28,15 @@ public class Interfaz extends JFrame{
         menuPrincipal.add(salirItem);
         setJMenuBar(menuBar);
 
-        //Función Salir
+        //Funcion Salir
         salirItem.addActionListener(e -> System.exit(0));
 
-        //Función ver la cola
+        //Funcion ver la cola
         verColaDeEspera.addActionListener(e -> {
             
         });
 
-        //Panel de Información
+        //Panel de Informacion
         JPanel panelInformacion = new JPanel();
         panelInformacion.setLayout(new BoxLayout(panelInformacion, BoxLayout.Y_AXIS));
 
@@ -56,7 +56,6 @@ public class Interfaz extends JFrame{
         //Lectura Archivo .txt
         File registro = new File("registro_pacientes.txt");
         if(registro.exists()){
-           
         }
 
         //Ingresar Mascota
@@ -77,12 +76,8 @@ public class Interfaz extends JFrame{
         });panelInformacion.add(botonIngresar);
 
         //Atender Mascota
-
-        
-
     }
-
-       
+  
     public static void main(String[] args) {
        Interfaz interfaz = new Interfaz();
        interfaz.setVisible(true);
