@@ -1,12 +1,12 @@
 public class NodoLista {
     //Atributos 
     NodoLista siguiente;
-    Mascota datos;
+    Mascota datosP;
     
     //Métodos Constructores
     public NodoLista(Mascota datosP){
         setSiguiente(null);
-        setDatos(datosP);
+        setDatosP(datosP);
     }
 
     //Getters
@@ -14,8 +14,8 @@ public class NodoLista {
         return siguiente;
     }
 
-    public Mascota getDatos(){
-        return datos;
+    public Mascota getDatosP(){
+        return datosP;
     }
 
     //Setters
@@ -23,7 +23,7 @@ public class NodoLista {
         this.siguiente = siguienteP;
     }
 
-    public void setDatos(Mascota datosP){
-        this.datos = datosP;
+    public void setDatosP(Mascota datosP){
+        this.datosP = datosP;
     }
 }

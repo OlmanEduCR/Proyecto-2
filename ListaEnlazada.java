@@ -1,15 +1,17 @@
 public class ListaEnlazada{
     //Atributos
     NodoLista cabeza;
+    private int tamano;
 
-    //Método Constructor
+    //Metodo Constructor
     public ListaEnlazada(){
         this.cabeza = new NodoLista(null);
+        this.tamano = 0;
     }
 
     //Métodos 
-    public void agregar(Mascota datos){
-        NodoLista nuevoNodo = new NodoLista(datos);
+    public void agregar(Mascota datosP){
+        NodoLista nuevoNodo = new NodoLista(datosP);
         if(cabeza == null){
             cabeza = nuevoNodo;
         } else {
@@ -19,14 +21,18 @@ public class ListaEnlazada{
             }
             actual.siguiente = nuevoNodo;
         }
+        tamano++;
     }
 
-    public boolean atender(Mascota datos){
-        if (cabeza == null) return false;            
-        if (cabeza.datos.equals(datos)) {
-            cabeza = cabeza.siguiente;
-        } return true;
+    public boolean atender(Mascota datosP) {
+    if (cabeza == null) return false;
+    if (cabeza.datosP.equals(datosP)) {
+        cabeza = cabeza.siguiente;
+        tamano--;
+        return true;
     }
+    return false;
+}
     
     public void imprimir(){
         NodoLista actual = cabeza;
