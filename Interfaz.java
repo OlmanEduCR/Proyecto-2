@@ -38,7 +38,12 @@ public class Interfaz extends JFrame{
 
         //Funcion ver la cola
         verColaDeEspera.addActionListener(e -> {
-            
+            StringBuilder contenido = new StringBuilder("Mascotas en lista de espera \n");
+            Mascota[] mascotas = listaMascotas.obtenerTodas();
+            for(Mascota m : mascotas) {
+                contenido.append("- ").append(m.getNombre()).append(" ID ").append(m.getId()).append("\n");
+            }    
+            JOptionPane.showMessageDialog(null, contenido.toString(), "Cola de espera", JOptionPane.INFORMATION_MESSAGE);        
         });
 
         //Panel de Informacion
@@ -88,22 +93,27 @@ public class Interfaz extends JFrame{
             campoNombre.setText("");
             campoId.setText("");
             guardarMascotasEnArchivo("registro_pacientes.txt");
+            actualizarTablaMascotas();
         });
         panelInformacion.add(botonIngresar);
 
         //Atender Mascota
-
-        
-        JButton botonAtender = new JButton("Atender Mascota");
+        JButton botonAtender = new JButton("Atender mascota");
         botonAtender.addActionListener(e -> {
             if (listaMascotas.getTamano() > 0) {
+                Mascota atendida = listaMascotas.obtenerPrimera();
                 listaMascotas.removerPrimero();
                 guardarMascotasEnArchivo("registro_pacientes.txt");
                 actualizarTablaMascotas();
+
+                JOptionPane.showMessageDialog(null, "Mascota atendida \n" + atendida.getNombre() + " ID " + atendida.getId() + "Atencion terminada");
+            } else { 
+                JOptionPane.showMessageDialog(null, "Lista de espera vacia", "cola vacia", JOptionPane.WARNING_MESSAGE);
             }
         });
-
+        panelInformacion.add(botonAtender);
     }
+
     private void guardarMascotasEnArchivo(String nombreArchivo) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(nombreArchivo))) {
             Mascota[] mascotas = listaMascotas.obtenerTodas();

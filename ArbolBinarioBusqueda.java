@@ -49,14 +49,10 @@ class ArbolBinarioBusqueda {
         raiz = eliminarRec(raiz, nombreMascota);
     }
 
-
     private NodoABB eliminarRec(NodoABB nodo, String nombreMascota){
         if(nodo == null){
             return null;
         }
-        
-        
-
         int cmp = nombreMascota.compareToIgnoreCase(nodo.mascota.getNombre());
         if (cmp < 0){
             nodo.izquierdo = eliminarRec(nodo.izquierdo, nombreMascota);
@@ -73,6 +69,7 @@ class ArbolBinarioBusqueda {
         }
         return nodo;
     }
+
     private Mascota minValor(NodoABB nodo){
         NodoABB actual = nodo;
         while(actual.izquierdo != null) {

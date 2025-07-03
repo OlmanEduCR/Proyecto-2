@@ -9,35 +9,43 @@ public class ListaEnlazada{
         this.tamano = 0;
     }
 
-    //Métodos 
-
-
-
-
+    //Metodos 
      public void removerPrimero() {
         if (cabeza != null) {
             cabeza = cabeza.siguiente;
+            tamano --;
         } else {
             System.out.println("La lista está vacía, no se puede remover.");
         }
     }
 
 
-
-
-
     public void agregar(Mascota datosP){
         NodoLista nuevoNodo = new NodoLista(datosP);
         if(cabeza == null){
             cabeza = nuevoNodo;
-        } else {
-            NodoLista actual = cabeza;
-            while(actual.siguiente != null){
-                actual = actual.siguiente;
-            }
-            actual.siguiente = nuevoNodo;
+            tamano ++;
+            return;
+        } 
+        if(datosP.getNombre().compareToIgnoreCase(cabeza.datosP.getNombre()) <= 0){
+            nuevoNodo.siguiente = cabeza;
+            cabeza = nuevoNodo;
+            tamano ++;
+            return;
         }
-        tamano++;
+        NodoLista actual = cabeza;
+        while(actual.siguiente != null) {
+            if (datosP.getNombre().compareToIgnoreCase(actual.siguiente.datosP.getNombre()) <= 0){
+                nuevoNodo.siguiente = actual.siguiente;
+                actual.siguiente = nuevoNodo;
+                tamano ++;
+                return;
+
+            }
+            actual = actual.siguiente;
+        }
+        actual.siguiente = nuevoNodo;
+        tamano ++;
     }
 
     public boolean atender(Mascota datosP) {
@@ -72,8 +80,13 @@ public class ListaEnlazada{
         }
         return arreglo;
     }
-
-
+    
+    public Mascota obtenerPrimera(){
+        if(cabeza == null){
+            return null;
+        }
+        return cabeza.datosP;
+    }
     
     public void imprimir() {
         NodoLista actual = cabeza;
