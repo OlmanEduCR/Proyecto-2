@@ -3,7 +3,7 @@ class NodoABB {
     Mascota mascota;
     NodoABB derecho, izquierdo ;
 
-    //Método Constructor
+    //Metodo Constructor
     public NodoABB(Mascota mascota) {
         this.mascota = mascota;
         this.derecho = this.izquierdo = null;

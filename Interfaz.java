@@ -10,7 +10,6 @@ import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
-
 public class Interfaz extends JFrame{
 
     private ArbolBinarioBusqueda arbolMascotas;
@@ -46,8 +45,6 @@ public class Interfaz extends JFrame{
         //Funcion Salir
         salirItem.addActionListener(e -> System.exit(0));
         verArbolMascotas.addActionListener(e -> mostrarTablaArbol());
-
-
 
         //Funcion ver la cola
         verColaDeEspera.addActionListener(e -> {
@@ -149,6 +146,22 @@ public class Interfaz extends JFrame{
                 JOptionPane.showMessageDialog(null, "Lista de espera vacia", "cola vacia", JOptionPane.WARNING_MESSAGE);
             }
         });
+       
+        botonBuscar.addActionListener(e -> {
+            String nombreBusqueda = campoBuscar.getText().trim();
+            if (nombreBusqueda.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Por favor, ingrese un nombre para buscar.", "Buscar Mascota", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            Mascota resultado = arbolMascotas.buscar(nombreBusqueda);
+            if (resultado != null) {
+                JOptionPane.showMessageDialog(null,
+                "Mascota encontrada \n Nombre: " + resultado.getNombre() + "\n ID " + resultado.getId(), "Resultado de busqueda", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Mascota con nombre " + nombreBusqueda + " no encontrada.", "Resultado de busqueda", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
 
         //Lectura Archivo .txt
         File registro = new File("registro_pacientes.txt");
@@ -187,10 +200,7 @@ public class Interfaz extends JFrame{
         frame.setVisible(true);
     }
 
-   
-
     // mostrar Tabla lista
-    
     private void mostrarTablaListaMascotas(){
         JFrame frame = new JFrame("Lista de mascotas");
         frame.setSize(400, 300);
@@ -230,7 +240,7 @@ public class Interfaz extends JFrame{
             JOptionPane.showMessageDialog(null, "Error al guardar: " + e.getMessage());
         }
     }
-    
+
     public void cargarMascotasDesdeArchivo(String nombreArchivo) {
         try (BufferedReader br = new BufferedReader(new FileReader(nombreArchivo))) {
             String linea;
@@ -255,6 +265,8 @@ public class Interfaz extends JFrame{
                     String id = idBuilder.toString().trim();
                     try{
                         listaMascotas.agregar(new Mascota(nombre, id));
+                        arbolMascotas.insertar(new Mascota (nombre, id));
+                        
                     } catch (Exception e){
                         System.out.println("Error al agregar mascota con ID " + id + ": " + e.getMessage());
                     }

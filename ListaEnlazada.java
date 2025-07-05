@@ -16,7 +16,7 @@ public class ListaEnlazada{
             cabeza = cabeza.siguiente;
             tamano --;
         } else {
-            System.out.println("La lista está vacía, no se puede remover.");
+            System.out.println("La lista esta vacia, no se puede remover.");
         }
     }
 
@@ -50,7 +50,7 @@ public class ListaEnlazada{
         return false;
     }
 
-    //Método para obtener la primera mascota de la lista (primero en la cola, sin removerla).
+    //Metodo para obtener la primera mascota de la lista (primero en la cola, sin removerla).
     public Mascota obtenerPrimera(){
         if(cabeza == null){
             return null;
@@ -58,12 +58,12 @@ public class ListaEnlazada{
         return cabeza.datosP;
     }
     
-    //Método para imprimir todas las mascotas de la lista.
+    //Metodo para imprimir todas las mascotas de la lista.
     public void imprimir() {
         NodoLista actual = cabeza;
         System.out.println("--- Contenido de la Lista Enlazada ---");
         if (cabeza == null) {
-            System.out.println("La lista está vacía.");
+            System.out.println("La lista esta vacia.");
             return;
         }
         while (actual != null) {

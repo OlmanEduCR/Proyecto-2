@@ -2,7 +2,7 @@ class ArbolBinarioBusqueda {
     //Atributos
     NodoABB raiz;
 
-    //Método Constructor
+    //Metodo Constructor
     public ArbolBinarioBusqueda() {
         raiz = null;
     }
@@ -24,7 +24,6 @@ class ArbolBinarioBusqueda {
         // Si es igual, no inserta duplicados (puedes cambiar esto si lo deseas)
         return raiz;
     }
-
 
     public Mascota buscar(String nombreMascota) {
         return buscarRec(nombreMascota, raiz);
@@ -92,8 +91,6 @@ class ArbolBinarioBusqueda {
         }
     }
 
-
-
     private Mascota minValor(NodoABB nodo){
         NodoABB actual = nodo;
         while(actual.izquierdo != null) {
@@ -102,4 +99,3 @@ class ArbolBinarioBusqueda {
         return actual.mascota;
     }
 }
-

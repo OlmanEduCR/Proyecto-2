@@ -3,7 +3,7 @@ public class NodoLista {
     NodoLista siguiente;
     Mascota datosP;
     
-    //Métodos Constructores
+    //Metodos Constructores
     public NodoLista(Mascota datosP){
         setSiguiente(null);
         setDatosP(datosP);
