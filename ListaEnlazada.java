@@ -10,7 +10,7 @@ public class ListaEnlazada{
     }
 
     //Metodos 
-    //Método para remover a la primer mascota que fue atendida.
+    //Metodo para remover a la primer mascota que fue atendida.
      public void removerPrimero() {
         if (cabeza != null) {
             cabeza = cabeza.siguiente;
@@ -20,7 +20,7 @@ public class ListaEnlazada{
         }
     }
 
-    //Método para agregar una nueva mascota al final de la lista (último en la cola).
+    //Metodo para agregar una nueva mascota al final de la lista (ultimo en la cola).
     public void agregar(Mascota datosP) throws Exception {
         if(existeId(datosP.getId())) {
             throw new Exception("La Id " + datosP.getId() + " ya existe.");
@@ -42,14 +42,13 @@ public class ListaEnlazada{
     public boolean existeId(String id){
         NodoLista actual = cabeza;
         while(actual != null){
-            if (actual.getDatoP().equals(id)){
+            if (actual.datosP.getId().equals(id)){
                 return true;
             }
-            actual = actual.getSiguiente();
+            actual = actual.siguiente;
         }
         return false;
     }
-
 
     //Método para obtener la primera mascota de la lista (primero en la cola, sin removerla).
     public Mascota obtenerPrimera(){
@@ -59,8 +58,6 @@ public class ListaEnlazada{
         return cabeza.datosP;
     }
     
-    
-
     //Método para imprimir todas las mascotas de la lista.
     public void imprimir() {
         NodoLista actual = cabeza;
@@ -75,8 +72,6 @@ public class ListaEnlazada{
         }
         System.out.println("------------------------------------");
     }
-
-    
 
     //Getters
     public int getTamano() {

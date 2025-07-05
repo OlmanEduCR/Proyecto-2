@@ -143,24 +143,30 @@ public class Interfaz extends JFrame{
         }
     }
     
-    private void cargarMascotasDesdeArchivo(String nombreArchivo){
-        File registro = new File(nombreArchivo);
-        if (registro.exists()){
-            try (BufferedReader br = new BufferedReader(new FileReader(registro))){
-                String linea;
-                while((linea = br.readLine()) != null ) {
-                    String[] partes = linea.split(",");
-                    if(partes.length == 2) {
-                        String nombre = partes[0].trim();
-                        String id = partes[1].trim();
-                        listaMascotas.agregar(new Mascota(nombre, id));
-                    }
+    public void cargarMascotasDesdeArchivo(String nombreArchivo) {
+    try (BufferedReader br = new BufferedReader(new FileReader(nombreArchivo))) {
+        String linea;
+        while ((linea = br.readLine()) != null) {
+            
+            String[] partes = linea.split(",");
+            if (partes.length == 2) {
+                String nombre = partes[0].trim();
+                String id = partes[1].trim();
+
+                try {
+                    listaMascotas.agregar(new Mascota(nombre, id)); 
+                } catch (Exception e) {
+                    System.out.println("Error al agregar mascota con ID " + id + ": " + e.getMessage());
                 }
-            } catch (IOException e){
-                JOptionPane.showMessageDialog(null, "Error en lectura de archivo" + e.getMessage());
+            } else {
+                System.out.println("Formato incorrecto en linea: " + linea);
             }
         }
+        System.out.println("Carga de mascotas finalizada.");
+    } catch (IOException e) {
+        System.out.println("Error al leer el archivo: " + e.getMessage());
     }
+}
 
     public void actualizarTablaMascotas() {
         DefaultTableModel modelo = new DefaultTableModel();
