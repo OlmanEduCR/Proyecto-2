@@ -12,6 +12,7 @@ public class Interfaz extends JFrame{
 
     private ArbolBinarioBusqueda arbolMascotas;
     private ListaEnlazada listaMascotas = new ListaEnlazada();
+    private ListaEnlazada colaEspera = new ListaEnlazada();
     private int contadorMascotas;
     private JTable tablaMascotas = new JTable();
     
@@ -37,11 +38,10 @@ public class Interfaz extends JFrame{
 
         //Funcion ver la cola
         verColaDeEspera.addActionListener(e -> {
-            NodoLista actual = listaMascotas.getCabeza();
+            NodoLista actual = colaEspera.getCabeza();
             if(actual == null){
                 JOptionPane.showMessageDialog(null, "no hay mascotas en espera", "Cola de espera", JOptionPane.INFORMATION_MESSAGE);
             } else {
-
                 StringBuilder contenido = new StringBuilder("Mascotas en lista de espera \n");
                 while (actual != null){
                     Mascota m = actual.datosP;
@@ -96,6 +96,7 @@ public class Interfaz extends JFrame{
             Mascota mascotaPorIngresar = new Mascota(mascotaNombre, mascotaId);
             try{
             listaMascotas.agregar(mascotaPorIngresar);
+            colaEspera.agregar(mascotaPorIngresar);
             JOptionPane.showMessageDialog(null, "Mascota ingresada exitosamente.");
 
             campoNombre.setText("");
@@ -112,9 +113,10 @@ public class Interfaz extends JFrame{
         //Atender Mascota
         JButton botonAtender = new JButton("Atender mascota");
         botonAtender.addActionListener(e -> {
-            if (listaMascotas.getTamano() > 0) {
-                Mascota atendida = listaMascotas.obtenerPrimera();
-                listaMascotas.removerPrimero();
+            if (colaEspera.getTamano() > 0) {
+                Mascota atendida = colaEspera.obtenerPrimera();
+                colaEspera.removerPrimero();
+                JOptionPane.showMessageDialog(null, "Mascota atendida \n" + atendida.getNombre() + " ID " + atendida.getId() + " \n Atencion terminada");
                 guardarMascotasEnArchivo("registro_pacientes.txt");
                 actualizarTablaMascotas();
 
@@ -145,29 +147,42 @@ public class Interfaz extends JFrame{
     }
     
     public void cargarMascotasDesdeArchivo(String nombreArchivo) {
-    try (BufferedReader br = new BufferedReader(new FileReader(nombreArchivo))) {
-        String linea;
-        while ((linea = br.readLine()) != null) {
-            
-            String[] partes = linea.split(",");
-            if (partes.length == 2) {
-                String nombre = partes[0].trim();
-                String id = partes[1].trim();
+        try (BufferedReader br = new BufferedReader(new FileReader(nombreArchivo))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                StringBuilder nombreBuilder = new StringBuilder();
+                StringBuilder idBuilder = new StringBuilder();
+                boolean comaEncontrada = false;
+                for(int i = 0; i<linea.length(); i++){
+                    char c = linea.charAt(i);
+                    if (!comaEncontrada){
+                        if (c == ','){
+                            comaEncontrada = true;
+                        } else {
+                            nombreBuilder.append(c);
+                        }
+                    } else {
+                        idBuilder.append(c);
+                    } 
 
-                try {
-                    listaMascotas.agregar(new Mascota(nombre, id)); 
-                } catch (Exception e) {
-                    System.out.println("Error al agregar mascota con ID " + id + ": " + e.getMessage());
                 }
-            } else {
-                System.out.println("Formato incorrecto en linea: " + linea);
+                if(comaEncontrada){
+                    String nombre = nombreBuilder.toString().trim();
+                    String id = idBuilder.toString().trim();
+                    try{
+                        listaMascotas.agregar(new Mascota(nombre, id));
+                    } catch (Exception e){
+                        System.out.println("Error al agregar mascota con ID " + id + ": " + e.getMessage());
+                    }
+                } else {
+                    System.out.println("Error en la linea" + linea);
+                }
             }
-        }
-        System.out.println("Carga de mascotas finalizada.");
-    } catch (IOException e) {
-        System.out.println("Error al leer el archivo: " + e.getMessage());
+            System.out.println("Carga de mascotas finalizada.");
+        } catch (IOException e) {
+            System.out.println("Error al leer el archivo: " + e.getMessage());
+        } 
     }
-}
 
     public void actualizarTablaMascotas() {
         DefaultTableModel modelo = new DefaultTableModel();
