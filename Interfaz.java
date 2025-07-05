@@ -27,9 +27,11 @@ public class Interfaz extends JFrame{
         JMenu menuPrincipal = new JMenu("Principal");
         JMenuItem salirItem = new JMenuItem("Salir");
         JMenuItem verColaDeEspera = new JMenuItem("Ver Cola");
+        JMenuItem verListaMascotas = new JMenuItem("Ver lista de mascotas");
 
         menuBar.add(menuPrincipal);
         menuPrincipal.add(verColaDeEspera);
+        menuPrincipal.add(verListaMascotas);
         menuPrincipal.add(salirItem);
         setJMenuBar(menuBar);
 
@@ -52,6 +54,8 @@ public class Interfaz extends JFrame{
             }       
         });
 
+        verListaMascotas.addActionListener(e -> mostrarTablaListaMascotas());
+
         //Panel de Informacion
         JPanel panelInformacion = new JPanel();
         panelInformacion.setLayout(new BoxLayout(panelInformacion, BoxLayout.Y_AXIS));
@@ -67,11 +71,9 @@ public class Interfaz extends JFrame{
         panelInformacion.add(etiquetaId);
         panelInformacion.add(campoId);
 
+        
 
-        //tabla al panel
-        JScrollPane scrollTabla = new JScrollPane(tablaMascotas);
-        scrollTabla.setPreferredSize(new Dimension (350,120));
-        panelInformacion.add(scrollTabla);
+       
 
         add(panelInformacion);
 
@@ -127,6 +129,33 @@ public class Interfaz extends JFrame{
         });
         panelInformacion.add(botonAtender);
     }
+
+
+     // mostrar Tabla lista
+    
+    private void mostrarTablaListaMascotas(){
+        JFrame frame = new JFrame("Lista de mascotas");
+        frame.setSize(400, 300);
+        frame.setLocationRelativeTo(null);
+        JTable tablaLista = new JTable();
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("Nombre");
+        modelo.addColumn("Id");
+        NodoLista actual = listaMascotas.getCabeza();
+        while (actual != null) {
+            java.util.Vector<Object> fila = new java.util.Vector<>();
+            fila.add(actual.getDatosP().getNombre());
+            fila.add(actual.getDatosP().getId());
+            modelo.addRow(fila);
+            actual = actual.getSiguiente();
+        }
+        tablaLista.setModel(modelo);
+        JScrollPane scroll = new JScrollPane(tablaLista);
+        frame.add(scroll);
+        frame.setVisible(true);
+    }
+
+
 
     private void guardarMascotasEnArchivo(String nombreArchivo) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(nombreArchivo))) {
