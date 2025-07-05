@@ -25,6 +25,11 @@ class ArbolBinarioBusqueda {
         return raiz;
     }
 
+
+    public Mascota buscar(String nombreMascota) {
+        return buscarRec(nombreMascota, raiz);
+    }
+
     public void inordenRec(NodoABB raiz) {
         if (raiz != null) {
             inordenRec(raiz.izquierdo);
@@ -71,6 +76,23 @@ class ArbolBinarioBusqueda {
         }
         return nodo;
     }
+
+    //Busqueda recursiva
+    private Mascota buscarRec(String nombreMascota, NodoABB nodo) {
+        if (nodo == null) {
+            return null; 
+        }
+        int cmp = nombreMascota.compareToIgnoreCase(nodo.mascota.getNombre());
+        if (cmp == 0) {
+            return nodo.mascota; 
+        } else if (cmp < 0) {
+            return buscarRec(nombreMascota, nodo.izquierdo);
+        } else {
+            return buscarRec(nombreMascota, nodo.derecho);
+        }
+    }
+
+
 
     private Mascota minValor(NodoABB nodo){
         NodoABB actual = nodo;

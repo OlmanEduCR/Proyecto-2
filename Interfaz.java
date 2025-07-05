@@ -7,6 +7,9 @@ import javax.swing.table.DefaultTableModel;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import javax.swing.*;
+import java.awt.BorderLayout;
+
+
 
 public class Interfaz extends JFrame{
 
@@ -17,10 +20,13 @@ public class Interfaz extends JFrame{
     private JTable tablaMascotas = new JTable();
     
     public Interfaz(){
+        arbolMascotas = new ArbolBinarioBusqueda();
+
         setTitle("Gestion de Mascotas Pacientes");
-        setSize(400, 300);
+        setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
 
         //Barra de Menu
         JMenuBar menuBar = new JMenuBar();
@@ -56,37 +62,48 @@ public class Interfaz extends JFrame{
 
         verListaMascotas.addActionListener(e -> mostrarTablaListaMascotas());
 
-        //Panel de Informacion
-        JPanel panelInformacion = new JPanel();
-        panelInformacion.setLayout(new BoxLayout(panelInformacion, BoxLayout.Y_AXIS));
+        JPanel panelCentral = new JPanel();
+        panelCentral.setLayout(new BoxLayout(panelCental, BoxLayout.Y_AXIS));
+        panelCentral.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); 
 
         JLabel etiquetaNombre = new JLabel("Digite el nombre de la Mascota: ");
-        JTextField campoNombre = new JTextField(20);       
-
+        JTextField campoNombre = new JTextField(20); 
         JLabel etiquetaId = new JLabel("Digite su Id:");
         JTextField campoId = new JTextField(20);
 
-        panelInformacion.add(etiquetaNombre);
-        panelInformacion.add(campoNombre);
-        panelInformacion.add(etiquetaId);
+        panelCentral.add(etiquetaNombre);
+        panelCentral.add(campoNombre);
+        panelCentral.add(Box.createVerticalStrut(10));
+        panelCentral.add(etiquetaId);
         panelInformacion.add(campoId);
+        panelCentral.add(Box.createVerticalStrut(10));
+
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
+        // Panel Menu
+        
+        JButton botonIngresar = new JButton("Ingresar al Sistema");
+        JButton botonAtender = new JButton("Atender mascota");
+
+        panelBotones.add(botonIngresar);
+        panelBotones.add(botonAtender);
+
+        panelCentral.add(panelBotones);
+        add(panelCentral, BorderLayout.CENTER);
+
+        JPanel panelBusqueda = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        JLabel etiquetaBuscar = new JLabel("Buscar mascota por nombre:");
+        JTextField campoBuscar = new JTextField(15);
+        JButton botonBuscar = new JButton("Buscar");
+
+        panelBusqueda.add(etiquetaBuscar);
+        panelBusqueda.add(campoBuscar);
+        panelBusqueda.add(botonBuscar);
+        add(panelBusqueda, BorderLayout.SOUTH);
+
+        //
 
         
-
-       
-
-        add(panelInformacion);
-
-        //Lectura Archivo .txt
-        File registro = new File("registro_pacientes.txt");
-        if(registro.exists()){
-            cargarMascotasDesdeArchivo("registro_pacientes.txt");
-        }
-        actualizarTablaMascotas();
-
-        //Ingresar a la Cola de Espera
-        JButton botonIngresar = new JButton("Ingresar al Sistema");
-        botonIngresar.addActionListener(e ->{
+        botonIngresar.addActionListener(e -> {
             String mascotaNombre = campoNombre.getText();
             String mascotaId = campoId.getText();
 
@@ -99,6 +116,7 @@ public class Interfaz extends JFrame{
             try{
             listaMascotas.agregar(mascotaPorIngresar);
             colaEspera.agregar(mascotaPorIngresar);
+            arbolMascotas.insertar(mascotaPorIngresar);
             JOptionPane.showMessageDialog(null, "Mascota ingresada exitosamente.");
 
             campoNombre.setText("");
@@ -110,10 +128,8 @@ public class Interfaz extends JFrame{
                 JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
-        panelInformacion.add(botonIngresar);
-
+ 
         //Atender Mascota
-        JButton botonAtender = new JButton("Atender mascota");
         botonAtender.addActionListener(e -> {
             if (colaEspera.getTamano() > 0) {
                 Mascota atendida = colaEspera.obtenerPrimera();
@@ -121,17 +137,23 @@ public class Interfaz extends JFrame{
                 JOptionPane.showMessageDialog(null, "Mascota atendida \n" + atendida.getNombre() + " ID " + atendida.getId() + " \n Atencion terminada");
                 guardarMascotasEnArchivo("registro_pacientes.txt");
                 actualizarTablaMascotas();
-
                 JOptionPane.showMessageDialog(null, "Mascota atendida \n" + atendida.getNombre() + " ID " + atendida.getId() + " \nAtencion terminada");
             } else { 
                 JOptionPane.showMessageDialog(null, "Lista de espera vacia", "cola vacia", JOptionPane.WARNING_MESSAGE);
             }
         });
-        panelInformacion.add(botonAtender);
+
+        //Lectura Archivo .txt
+        File registro = new File("registro_pacientes.txt");
+        if(registro.exists()){
+            cargarMascotasDesdeArchivo("registro_pacientes.txt");
+        }
+        actualizarTablaMascotas(); 
     }
 
+   
 
-     // mostrar Tabla lista
+    // mostrar Tabla lista
     
     private void mostrarTablaListaMascotas(){
         JFrame frame = new JFrame("Lista de mascotas");
@@ -154,8 +176,6 @@ public class Interfaz extends JFrame{
         frame.add(scroll);
         frame.setVisible(true);
     }
-
-
 
     private void guardarMascotasEnArchivo(String nombreArchivo) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(nombreArchivo))) {
@@ -193,7 +213,6 @@ public class Interfaz extends JFrame{
                     } else {
                         idBuilder.append(c);
                     } 
-
                 }
                 if(comaEncontrada){
                     String nombre = nombreBuilder.toString().trim();
