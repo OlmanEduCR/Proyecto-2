@@ -107,6 +107,7 @@ public class Interfaz extends JFrame{
                 JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
+        panelInformacion.add(botonIngresar);
 
         //Atender Mascota
         JButton botonAtender = new JButton("Atender mascota");
