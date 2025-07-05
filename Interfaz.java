@@ -33,16 +33,21 @@ public class Interfaz extends JFrame{
         JMenu menuPrincipal = new JMenu("Principal");
         JMenuItem salirItem = new JMenuItem("Salir");
         JMenuItem verColaDeEspera = new JMenuItem("Ver Cola");
+        JMenuItem verArbolMascotas = new JMenuItem("Ver Arbol de mascotas");
         JMenuItem verListaMascotas = new JMenuItem("Ver lista de mascotas");
 
         menuBar.add(menuPrincipal);
         menuPrincipal.add(verColaDeEspera);
         menuPrincipal.add(verListaMascotas);
+        menuPrincipal.add(verArbolMascotas);
         menuPrincipal.add(salirItem);
         setJMenuBar(menuBar);
 
         //Funcion Salir
         salirItem.addActionListener(e -> System.exit(0));
+        verArbolMascotas.addActionListener(e -> mostrarTablaArbol());
+
+
 
         //Funcion ver la cola
         verColaDeEspera.addActionListener(e -> {
@@ -60,7 +65,10 @@ public class Interfaz extends JFrame{
             }       
         });
 
+        // tabla de arbol lista mascota
         verListaMascotas.addActionListener(e -> mostrarTablaListaMascotas());
+
+        // tabla de arbol mascota
 
         JPanel panelCentral = new JPanel();
         panelCentral.setLayout(new BoxLayout(panelCentral, BoxLayout.Y_AXIS));
@@ -100,8 +108,7 @@ public class Interfaz extends JFrame{
         panelBusqueda.add(botonBuscar);
         add(panelBusqueda, BorderLayout.SOUTH);
 
-        //
-
+        //agragar a listas
         
         botonIngresar.addActionListener(e -> {
             String mascotaNombre = campoNombre.getText();
@@ -149,6 +156,35 @@ public class Interfaz extends JFrame{
             cargarMascotasDesdeArchivo("registro_pacientes.txt");
         }
         actualizarTablaMascotas(); 
+    }
+    
+    private void llenarModeloArbol(NodoABB nodo, DefaultTableModel modelo) {
+        if( nodo != null) {
+            llenarModeloArbol(nodo.izquierdo, modelo);
+            java.util.Vector<Object> fila = new java.util.Vector<>();
+            fila.add(nodo.mascota.getNombre());
+            fila.add(nodo.mascota.getId());
+            modelo.addRow(fila);
+            llenarModeloArbol(nodo.derecho, modelo);
+        }
+    }
+
+    //tabla lista arbol
+    private void mostrarTablaArbol(){
+        JFrame frame = new JFrame("Registro en arbol");
+        frame.setSize(400,300);
+        frame.setLocationRelativeTo(null);
+        JTable tablaArbol = new JTable();
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("Nombre");
+        modelo.addColumn("Id");
+        
+        llenarModeloArbol(arbolMascotas.raiz, modelo);
+
+        tablaArbol.setModel(modelo);
+        JScrollPane scroll = new JScrollPane(tablaArbol);
+        frame.add(scroll);
+        frame.setVisible(true);
     }
 
    
