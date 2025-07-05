@@ -37,16 +37,19 @@ public class Interfaz extends JFrame{
 
         //Funcion ver la cola
         verColaDeEspera.addActionListener(e -> {
-            Mascota[] mascotas = listaMascotas.obtenerTodas();
-            if( mascotas.length == 0){
-                JOptionPane.showMessageDialog(null, "No hay mascotas en espera.", "Cola de espera", JOptionPane.INFORMATION_MESSAGE);
+            NodoLista actual = listaMascotas.getCabeza();
+            if(actual == null){
+                JOptionPane.showMessageDialog(null, "no hay mascotas en espera", "Cola de espera", JOptionPane.INFORMATION_MESSAGE);
             } else {
+
                 StringBuilder contenido = new StringBuilder("Mascotas en lista de espera \n");
-                for(Mascota m : mascotas) {
+                while (actual != null){
+                    Mascota m = actual.datosP;
                     contenido.append("- ").append(m.getNombre()).append(" ID ").append(m.getId()).append("\n");
-                }    
+                    actual = actual.siguiente;
+                }
                 JOptionPane.showMessageDialog(null, contenido.toString(), "Cola de espera", JOptionPane.INFORMATION_MESSAGE);
-            }        
+            }       
         });
 
         //Panel de Informacion
@@ -91,6 +94,7 @@ public class Interfaz extends JFrame{
             }
 
             Mascota mascotaPorIngresar = new Mascota(mascotaNombre, mascotaId);
+            try{
             listaMascotas.agregar(mascotaPorIngresar);
             JOptionPane.showMessageDialog(null, "Mascota ingresada exitosamente.");
 
@@ -99,7 +103,10 @@ public class Interfaz extends JFrame{
 
             guardarMascotasEnArchivo("registro_pacientes.txt");
             actualizarTablaMascotas();
-        });panelInformacion.add(botonIngresar);
+            } catch (Exception ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
 
         //Atender Mascota
         JButton botonAtender = new JButton("Atender mascota");
@@ -120,10 +127,16 @@ public class Interfaz extends JFrame{
 
     private void guardarMascotasEnArchivo(String nombreArchivo) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(nombreArchivo))) {
-            Mascota[] mascotas = listaMascotas.obtenerTodas();
-            for (Mascota mascota : mascotas){
-                bw.write(mascota.getNombre() + ", " + mascota.getId());
-                bw.newLine();
+            NodoLista actual = listaMascotas.getCabeza();
+            if (actual == null){
+                bw.write ("No hay mascotas en la lista.");
+            } else {
+                while (actual != null) {
+                    Mascota mascota = actual.datosP;
+                    bw.write(mascota.getNombre() + "," + mascota.getId());
+                    bw.newLine();
+                    actual = actual.siguiente;
+                }
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error al guardar: " + e.getMessage());
@@ -150,14 +163,18 @@ public class Interfaz extends JFrame{
     }
 
     public void actualizarTablaMascotas() {
-        String[] columnas = {"Nombre", "ID"};
-        Mascota[] mascotas = listaMascotas.obtenerTodas(); 
-        Object[][] datos = new Object[mascotas.length][2]; 
-        for (int i = 0; i < mascotas.length; i++) { 
-            datos[i][0] = mascotas[i].getNombre(); 
-            datos[i][1] = mascotas[i].getId(); 
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("Nombre");
+        modelo.addColumn("Id");
+
+        NodoLista actual = listaMascotas.getCabeza();
+        while (actual != null){
+            java.util.Vector<Object> fila = new java.util.Vector<>();
+            fila.add(actual.getDatosP().getNombre());
+            fila.add(actual.getDatosP().getId());
+            modelo.addRow(fila);
+            actual = actual.getSiguiente();
         }
-        DefaultTableModel modelo = new DefaultTableModel(datos, columnas);
         tablaMascotas.setModel(modelo);
     }
   

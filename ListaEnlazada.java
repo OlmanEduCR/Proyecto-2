@@ -21,7 +21,10 @@ public class ListaEnlazada{
     }
 
     //Método para agregar una nueva mascota al final de la lista (último en la cola).
-    public void agregar(Mascota datosP){
+    public void agregar(Mascota datosP) throws Exception {
+        if(existeId(datosP.getId())) {
+            throw new Exception("La Id " + datosP.getId() + " ya existe.");
+        }
         NodoLista nuevoNodo = new NodoLista(datosP);
         if (cabeza == null) {
             cabeza = nuevoNodo;
@@ -34,20 +37,20 @@ public class ListaEnlazada{
         }
         tamano++;
     }
-
-    //Método para obtener todas las mascotas de la lista en un arreglo.
-    public Mascota[] obtenerTodas() {
-        Mascota[] arreglo = new Mascota[tamano];
-        NodoLista actual = cabeza;
-        int i = 0;
-        while (actual != null){
-            arreglo[i] = actual.datosP;
-            actual = actual.siguiente;
-            i++;
-        }
-        return arreglo;
-    }
     
+    //Verificar Id unica
+    public boolean existeId(String id){
+        NodoLista actual = cabeza;
+        while(actual != null){
+            if (actual.getDatoP().equals(id)){
+                return true;
+            }
+            actual = actual.getSiguiente();
+        }
+        return false;
+    }
+
+
     //Método para obtener la primera mascota de la lista (primero en la cola, sin removerla).
     public Mascota obtenerPrimera(){
         if(cabeza == null){
@@ -56,6 +59,8 @@ public class ListaEnlazada{
         return cabeza.datosP;
     }
     
+    
+
     //Método para imprimir todas las mascotas de la lista.
     public void imprimir() {
         NodoLista actual = cabeza;
@@ -71,8 +76,14 @@ public class ListaEnlazada{
         System.out.println("------------------------------------");
     }
 
+    
+
     //Getters
     public int getTamano() {
         return tamano;
+    }
+
+    public NodoLista getCabeza(){
+        return cabeza;
     }
 }
