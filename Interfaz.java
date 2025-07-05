@@ -8,7 +8,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import javax.swing.*;
 import java.awt.BorderLayout;
-
+import java.awt.FlowLayout;
 
 
 public class Interfaz extends JFrame{
@@ -63,7 +63,7 @@ public class Interfaz extends JFrame{
         verListaMascotas.addActionListener(e -> mostrarTablaListaMascotas());
 
         JPanel panelCentral = new JPanel();
-        panelCentral.setLayout(new BoxLayout(panelCental, BoxLayout.Y_AXIS));
+        panelCentral.setLayout(new BoxLayout(panelCentral, BoxLayout.Y_AXIS));
         panelCentral.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); 
 
         JLabel etiquetaNombre = new JLabel("Digite el nombre de la Mascota: ");
@@ -75,7 +75,7 @@ public class Interfaz extends JFrame{
         panelCentral.add(campoNombre);
         panelCentral.add(Box.createVerticalStrut(10));
         panelCentral.add(etiquetaId);
-        panelInformacion.add(campoId);
+        panelCentral.add(campoId);
         panelCentral.add(Box.createVerticalStrut(10));
 
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
